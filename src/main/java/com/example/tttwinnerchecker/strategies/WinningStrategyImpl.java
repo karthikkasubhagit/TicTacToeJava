@@ -78,4 +78,19 @@ public class WinningStrategyImpl implements WinningStrategy {
         return currentRowMap.get(symbol) == board.getDimension() ||
                 currentColMap.get(symbol) == board.getDimension();
     }
+
+    public void undoMove(Move move, int dimension) {
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
+        Symbol symbol = move.getPlayer().getSymbol();
+
+        rowMaps.get(row).put(symbol, rowMaps.get(row).get(symbol) - 1);
+        colMaps.get(col).put(symbol, colMaps.get(col).get(symbol) - 1);
+        if (row == col) {
+            leftDiagonalMap.put(symbol, leftDiagonalMap.get(symbol) - 1);
+        }
+        if (row + col == dimension - 1) {
+            rightDiagonalMap.put(symbol, rightDiagonalMap.get(symbol) - 1);
+        }
+    }
 }

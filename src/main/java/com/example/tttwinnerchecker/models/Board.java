@@ -50,4 +50,13 @@ public class Board {
             System.out.println();
         }
     }
+
+    public void undoMove(Move move) {
+        int removedRow = move.getCell().getRow();
+        int removedCol = move.getCell().getCol();
+
+        Cell cell = board.get(removedRow).get(removedCol);
+        cell.setPlayer(null);
+        cell.setCellState(CellState.EMPTY);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.tttwinnerchecker.models;
 
+import com.example.tttwinnerchecker.exceptions.EmptyMovesException;
 import com.example.tttwinnerchecker.exceptions.GameInvalidationException;
 import com.example.tttwinnerchecker.exceptions.InvalidMoveException;
 import com.example.tttwinnerchecker.strategies.WinningStrategy;
@@ -165,6 +166,18 @@ public class Game {
             winner = currentPlayer;
         } else if (moves.size() == board.getDimension() * board.getDimension()) {
             gameState = GameState.DRAW;
+        }
+    }
+
+    public void undo() throws EmptyMovesException {
+        if (!moves.isEmpty()) {
+            Move lastMove = moves.remove(moves.size() - 1);
+            board.undoMove(lastMove);
+
+            nextPlayerMoveIndex = (nextPlayerMoveIndex - 1 + players.size()) % players.size();
+            ((WinningStrategyImpl) winningStrategy).undoMove(lastMove, board.getDimension());
+        } else {
+            throw new EmptyMovesException("Undo operation can't be performed as the moves list is empty");
         }
     }
 }
